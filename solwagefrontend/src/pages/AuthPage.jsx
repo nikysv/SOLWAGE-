@@ -48,13 +48,19 @@ const AuthPage = ({ onLoginSuccess }) => {
       const userData = {
         email: formData.email,
         phone: formData.phone,
-        userType: formData.userType,
+        userType: formData.userType || "freelancer",
         profile: formData.profile,
         smartWalletAddress: `0x${Math.random().toString(16).substr(2, 40)}`,
         createdAt: new Date().toISOString(),
         isNewUser: true, // Marcar como usuario nuevo
       };
       onLoginSuccess(userData);
+      // Navegar al dashboard correcto
+      if ((formData.userType || "freelancer") === "employer") {
+        navigate("/employer/dashboard", { replace: true });
+      } else {
+        navigate("/freelancer/dashboard", { replace: true });
+      }
     }, 2000);
   };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const TechnologyInfo = () => {
   return (
@@ -124,7 +125,9 @@ const TechnologyInfo = () => {
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Comenzar Ahora
+                  <Link to="/auth" className="block">
+                    Comenzar Ahora
+                  </Link>
                 </motion.button>
 
                 <motion.button

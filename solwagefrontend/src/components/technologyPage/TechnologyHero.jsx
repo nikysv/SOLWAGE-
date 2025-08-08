@@ -106,13 +106,7 @@ const TechnologyHero = () => {
                 Explorar Tecnología
               </Link>
             </motion.button>
-            <motion.button
-              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Ver Demo
-            </motion.button>
+            {/* Demo button removed per request */}
           </motion.div>
         </motion.div>
       </div>

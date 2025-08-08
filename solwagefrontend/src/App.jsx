@@ -11,7 +11,7 @@ function App() {
     <Router>
       <AppRoutes auth={auth} />
       {/* Test User Switcher - Remove this in production */}
-      <TestUserSwitcher />
+      {auth?.user && <TestUserSwitcher />}
     </Router>
   );
 }

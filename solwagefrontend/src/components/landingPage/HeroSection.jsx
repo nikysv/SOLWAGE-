@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const HeroSection = () => {
   const location = useLocation();
@@ -120,14 +120,9 @@ const HeroSection = () => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              Empezar Ahora
-            </motion.button>
-            <motion.button
-              className="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold hover:bg-purple-50 transition-all duration-300 border-2 border-purple-200 hover:border-purple-300"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Ver Demo
+              <Link to="/auth" className="block">
+                Empezar Ahora
+              </Link>
             </motion.button>
           </motion.div>
 

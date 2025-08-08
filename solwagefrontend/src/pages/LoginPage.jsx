@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BackButton from "../components/common/BackButton";
 
 const LoginPage = ({ auth }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -81,12 +82,13 @@ const LoginPage = ({ auth }) => {
           smartWalletAddress: `0x${Math.random().toString(16).substr(2, 40)}`,
           createdAt: new Date().toISOString(),
           isNewUser: false, // Marcar como usuario existente
+          userType: "freelancer", // Por defecto mostrar dashboard de freelancer
         };
 
         auth.login(userData);
         setIsLoading(false);
-        // Navegar según el tipo de usuario (asumiendo employer por defecto en login manual)
-        navigate("/employer/dashboard");
+        // Navegar al dashboard de freelancer por defecto
+        navigate("/freelancer/dashboard", { replace: true });
       }, 1500);
     }
   };
