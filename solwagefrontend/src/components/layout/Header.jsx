@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, userData, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,6 +56,9 @@ const Header = () => {
     }
   };
 
+  const isFreelancer = isAuthenticated && userData?.userType === "freelancer";
+  const isEmployer = isAuthenticated && userData?.userType === "employer";
+
   return (
     <motion.header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -65,153 +70,222 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
+           {" "}
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
+               {" "}
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+                    {/* Logo */}         {" "}
           <motion.div
             className="flex-shrink-0"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
+                       {" "}
             <Link to="/">
+                           {" "}
               <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent hover:from-purple-700 hover:to-blue-700 transition-all duration-300">
-                Solwage
+                                Solwage              {" "}
               </h1>
+                         {" "}
             </Link>
+                     {" "}
           </motion.div>
-
-          {/* Desktop Navigation */}
+                    {/* Desktop Navigation */}         {" "}
           <div className="hidden md:flex items-center space-x-8">
-            {/* Inicio - siempre visible */}
+                        {/* Inicio - siempre visible */}           {" "}
             <motion.div
               className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
             >
+                           {" "}
               <Link to="/" className="block">
-                Inicio
-                <motion.span
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
+                                Inicio              {" "}
               </Link>
+                         {" "}
             </motion.div>
-
-            {/* Enlaces internos - solo en landing page */}
+                        {/* Enlaces internos - solo en landing page */}         
+             {" "}
             {location.pathname === "/" && (
               <>
+                               {" "}
                 <motion.button
                   onClick={() => scrollToSection("que-es-solwage")}
                   className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.2 }}
                 >
-                  ¿Qué es Solwage?
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  />
+                                    ¿Qué es Solwage?                {" "}
                 </motion.button>
-
+                               {" "}
                 <motion.button
                   onClick={() => scrollToSection("beneficios")}
                   className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.2 }}
                 >
-                  Beneficios
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  />
+                                    Beneficios                {" "}
                 </motion.button>
+                             {" "}
               </>
             )}
-
-            {/* Enlace a Tecnología - siempre visible */}
+                        {/* Enlace a Tecnología - siempre visible */}           {" "}
             <motion.div
               className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
             >
+                           {" "}
               <Link to="/tecnologia" className="block">
-                Tecnología
-                <motion.span
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-600 to-blue-600"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
+                                Tecnología              {" "}
               </Link>
+                         {" "}
             </motion.div>
-
-            <motion.div
-              className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Link to="/auth" className="block">
-                <motion.button
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
-                  whileHover={{ y: -2, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                        {/* Navegación autenticada */}           {" "}
+            {isAuthenticated ? (
+              <>
+                               {" "}
+                {isFreelancer && (
+                  <>
+                                        {/* Enlaces de Wallet */}               
+                       {" "}
+                    <motion.div
+                      className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                                           {" "}
+                      <Link to="/freelancer/wallet" className="block">
+                                                Mi Wallet                      {" "}
+                      </Link>
+                                         {" "}
+                    </motion.div>
+                                       {" "}
+                    <motion.div
+                      className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                      whileHover={{ y: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                                           {" "}
+                      <Link to="/freelancer/defi" className="block">
+                                                DeFi                      {" "}
+                      </Link>
+                                         {" "}
+                    </motion.div>
+                                     {" "}
+                  </>
+                )}
+                                                {/* Enlace a Dashboard */}     
+                         {" "}
+                <motion.div
+                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -2 }}
                   transition={{ duration: 0.2 }}
                 >
-                  Empezar
-                </motion.button>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Link to="/login" className="block">
+                                   {" "}
+                  <Link
+                    to={
+                      isEmployer
+                        ? "/employer/dashboard"
+                        : "/freelancer/dashboard"
+                    }
+                    className="block"
+                  >
+                                        Dashboard                  {" "}
+                  </Link>
+                                 {" "}
+                </motion.div>
+                               {" "}
                 <motion.button
+                  onClick={logout}
                   className="bg-white text-purple-600 px-6 py-2.5 rounded-lg border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
-                  Iniciar Sesión
+                                    Cerrar sesión                {" "}
                 </motion.button>
-              </Link>
-            </motion.div>
+                             {" "}
+              </>
+            ) : (
+              <>
+                               {" "}
+                <motion.div
+                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                >
+                                   {" "}
+                  <Link to="/auth" className="block">
+                                       {" "}
+                    <motion.button
+                      className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
+                      whileHover={{ y: -2, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                                            Empezar                    {" "}
+                    </motion.button>
+                                     {" "}
+                  </Link>
+                                 {" "}
+                </motion.div>
+                               {" "}
+                <motion.div
+                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -2 }}
+                  transition={{ duration: 0.2 }}
+                >
+                                   {" "}
+                  <Link to="/login" className="block">
+                                       {" "}
+                    <motion.button
+                      className="bg-white text-purple-600 px-6 py-2.5 rounded-lg border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
+                      whileHover={{ y: -2, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                                            Iniciar Sesión                    {" "}
+                    </motion.button>
+                                     {" "}
+                  </Link>
+                                 {" "}
+                </motion.div>
+                             {" "}
+              </>
+            )}
+                     {" "}
           </div>
-
-          {/* Mobile menu button */}
+                    {/* Mobile menu button */}         {" "}
           <div className="md:hidden">
+                       {" "}
             <motion.button
               onClick={toggleMenu}
               className="text-gray-700 hover:text-purple-600 transition-colors duration-300"
               whileTap={{ scale: 0.95 }}
             >
+                           {" "}
               <svg
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
+                               {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M4 6h16M4 12h16M4 18h16"
                 />
+                             {" "}
               </svg>
             </motion.button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
+                {/* Mobile Navigation */}       {" "}
         <AnimatePresence>
+                   {" "}
           {isMenuOpen && (
             <motion.div
               className="md:hidden"
@@ -220,19 +294,23 @@ const Header = () => {
               animate="open"
               exit="closed"
             >
+                           {" "}
               <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-                {/* Inicio - siempre visible */}
+                                {/* Inicio - siempre visible */}               {" "}
                 <motion.div
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
                   variants={menuItemVariants}
                 >
+                                   {" "}
                   <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                    Inicio
+                                        Inicio                  {" "}
                   </Link>
+                                 {" "}
                 </motion.div>
-
+                               {" "}
                 {location.pathname === "/" && (
                   <>
+                                       {" "}
                     <motion.button
                       onClick={() => {
                         scrollToSection("que-es-solwage");
@@ -241,9 +319,9 @@ const Header = () => {
                       className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
                       variants={menuItemVariants}
                     >
-                      ¿Qué es Solwage?
+                                            ¿Qué es Solwage?                    {" "}
                     </motion.button>
-
+                                       {" "}
                     <motion.button
                       onClick={() => {
                         scrollToSection("beneficios");
@@ -252,42 +330,135 @@ const Header = () => {
                       className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
                       variants={menuItemVariants}
                     >
-                      Beneficios
+                                            Beneficios                    {" "}
                     </motion.button>
+                                     {" "}
                   </>
                 )}
-
+                               {" "}
                 <motion.div
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
                   variants={menuItemVariants}
                 >
+                                   {" "}
                   <Link to="/tecnologia" onClick={() => setIsMenuOpen(false)}>
-                    Tecnología
+                                        Tecnología                  {" "}
                   </Link>
+                                 {" "}
                 </motion.div>
-
-                <motion.div
-                  className="block w-full text-left px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-300"
-                  variants={menuItemVariants}
-                >
-                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                    Empezar
-                  </Link>
-                </motion.div>
-
-                <motion.div
-                  className="block w-full text-left px-3 py-2 bg-white text-purple-600 border-2 border-purple-200 rounded-md hover:bg-purple-50 transition-colors duration-300"
-                  variants={menuItemVariants}
-                >
-                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                    Iniciar Sesión
-                  </Link>
-                </motion.div>
+                               {" "}
+                {isAuthenticated ? (
+                  <>
+                                       {" "}
+                    {isFreelancer && (
+                      <>
+                                               {" "}
+                        <div className="px-3 pt-2 text-xs font-semibold text-gray-500">
+                                                    Wallet                      
+                           {" "}
+                        </div>
+                                               {" "}
+                        <motion.div
+                          className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                          variants={menuItemVariants}
+                        >
+                                                   {" "}
+                          <Link
+                            to="/freelancer/wallet"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                                                        Mi Wallet              
+                                       {" "}
+                          </Link>
+                                                 {" "}
+                        </motion.div>
+                                               {" "}
+                        <motion.div
+                          className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                          variants={menuItemVariants}
+                        >
+                                                   {" "}
+                          <Link
+                            to="/freelancer/defi"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                                                        DeFi                    
+                                 {" "}
+                          </Link>
+                                                 {" "}
+                        </motion.div>
+                                             {" "}
+                      </>
+                    )}
+                                       {" "}
+                    <motion.div
+                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                      variants={menuItemVariants}
+                    >
+                                           {" "}
+                      <Link
+                        to={
+                          isEmployer
+                            ? "/employer/dashboard"
+                            : "/freelancer/dashboard"
+                        }
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                                                Dashboard                      {" "}
+                      </Link>
+                                         {" "}
+                    </motion.div>
+                                       {" "}
+                    <motion.button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        logout();
+                      }}
+                      className="block w-full text-left px-3 py-2 bg-white text-purple-600 border-2 border-purple-200 rounded-md hover:bg-purple-50 transition-colors duration-300"
+                      variants={menuItemVariants}
+                    >
+                                            Cerrar sesión                    {" "}
+                    </motion.button>
+                                     {" "}
+                  </>
+                ) : (
+                  <>
+                                       {" "}
+                    <motion.div
+                      className="block w-full text-left px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-300"
+                      variants={menuItemVariants}
+                    >
+                                           {" "}
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                                                Empezar                      {" "}
+                      </Link>
+                                         {" "}
+                    </motion.div>
+                                       {" "}
+                    <motion.div
+                      className="block w-full text-left px-3 py-2 bg-white text-purple-600 border-2 border-purple-200 rounded-md hover:bg-purple-50 transition-colors duration-300"
+                      variants={menuItemVariants}
+                    >
+                                           {" "}
+                      <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                                                Iniciar Sesión                  
+                           {" "}
+                      </Link>
+                                         {" "}
+                    </motion.div>
+                                     {" "}
+                  </>
+                )}
+                             {" "}
               </div>
+                         {" "}
             </motion.div>
           )}
+                 {" "}
         </AnimatePresence>
+             {" "}
       </div>
+         {" "}
     </motion.header>
   );
 };

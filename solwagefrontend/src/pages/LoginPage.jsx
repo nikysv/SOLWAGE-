@@ -1,123 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import BackButton from "../components/common/BackButton";
 
 const LoginPage = ({ auth }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showVerification, setShowVerification] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [countdown, setCountdown] = useState(0);
+  const fallbackAuth = useAuth();
+  const { loginWithGoogle } = auth || fallbackAuth;
 
-  const validateForm = () => {
-    const newErrors = {};
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await loginWithGoogle();
 
-    if (!formData.email.trim()) {
-      newErrors.email = "El correo electrónico es requerido";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Ingresa un correo electrónico válido";
-    }
+      if (result.isNewUser || result.requiresProfileCompletion) {
+        navigate("/auth", { replace: true, state: { step: "user-type", user: result.user } });
+        return;
+      }
 
-    if (!formData.password.trim()) {
-      newErrors.password = "La contraseña es requerida";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateVerification = () => {
-    const newErrors = {};
-
-    if (!verificationCode.trim()) {
-      newErrors.verificationCode = "El código de verificación es requerido";
-    } else if (verificationCode !== "123456") {
-      newErrors.verificationCode = "Código de verificación incorrecto";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      setIsLoading(true);
-
-      // Simular envío de código de verificación
-      setTimeout(() => {
-        setIsLoading(false);
-        setShowVerification(true);
-        setCountdown(60);
-
-        // Iniciar countdown
-        const timer = setInterval(() => {
-          setCountdown((prev) => {
-            if (prev <= 1) {
-              clearInterval(timer);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-      }, 1500);
-    }
-  };
-
-  const handleVerification = async (e) => {
-    e.preventDefault();
-    if (validateVerification()) {
-      setIsLoading(true);
-
-      // Simular verificación exitosa
-      setTimeout(() => {
-        const userData = {
-          email: formData.email,
-          smartWalletAddress: `0x${Math.random().toString(16).substr(2, 40)}`,
-          createdAt: new Date().toISOString(),
-          isNewUser: false, // Marcar como usuario existente
-          userType: "freelancer", // Por defecto mostrar dashboard de freelancer
-        };
-
-        auth.login(userData);
-        setIsLoading(false);
-        // Navegar al dashboard de freelancer por defecto
+      if (result.userData?.userType === "employer") {
+        navigate("/employer/dashboard", { replace: true });
+      } else if (result.userData?.userType === "freelancer") {
         navigate("/freelancer/dashboard", { replace: true });
-      }, 1500);
-    }
-  };
-
-  const handleResendCode = () => {
-    setCountdown(60);
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    // Limpiar error del campo cuando el usuario empiece a escribir
-    if (errors[field]) {
-      setErrors((prev) => ({
-        ...prev,
-        [field]: "",
-      }));
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
+    } catch (error) {
+      console.error("Error en login con Google:", error);
+      alert("No se pudo iniciar sesión con Google. Intenta de nuevo.");
     }
   };
 
@@ -129,7 +39,6 @@ const LoginPage = ({ auth }) => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        {/* Header con botón de regreso */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-between mb-6">
             <BackButton />
@@ -139,211 +48,29 @@ const LoginPage = ({ auth }) => {
           <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl text-white">🔐</span>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {showVerification ? "Verificar Código" : "Iniciar Sesión"}
-          </h2>
-          <p className="text-gray-600">
-            {showVerification
-              ? "Ingresa el código enviado a tu correo"
-              : "Accede a tu cuenta de Solwage"}
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Iniciar Sesión</h2>
+          <p className="text-gray-600">Accede a tu cuenta de Solwage</p>
         </div>
 
-        {/* Formulario */}
-        <motion.form
-          onSubmit={showVerification ? handleVerification : handleSubmit}
+        <motion.div
           className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <div className="space-y-6">
-            {!showVerification ? (
-              <>
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Correo Electrónico
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 ${
-                      errors.email
-                        ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="tu@email.com"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                  )}
-                </div>
-
-                {/* Password */}
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Contraseña
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 ${
-                      errors.password
-                        ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="••••••••"
-                  />
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.password}
-                    </p>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Información del usuario */}
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <span className="text-purple-600 text-lg">📧</span>
-                    </div>
-                    <div className="ml-3">
-                      <h4 className="text-sm font-medium text-purple-900">
-                        Código enviado
-                      </h4>
-                      <p className="text-sm text-purple-700 mt-1">
-                        Hemos enviado un código de verificación a{" "}
-                        {formData.email}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Código de verificación */}
-                <div>
-                  <label
-                    htmlFor="verificationCode"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Código de Verificación
-                  </label>
-                  <input
-                    type="text"
-                    id="verificationCode"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 ${
-                      errors.verificationCode
-                        ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="123456"
-                    maxLength={6}
-                  />
-                  {errors.verificationCode && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.verificationCode}
-                    </p>
-                  )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    Ingresa el código de 6 dígitos enviado a tu correo
-                  </p>
-                </div>
-
-                {/* Reenviar código */}
-                <div className="text-center space-y-2">
-                  <p className="text-sm text-gray-600 mb-2">
-                    ¿No recibiste el código?
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleResendCode}
-                    disabled={countdown > 0}
-                    className={`text-sm font-medium transition-colors duration-300 ${
-                      countdown > 0
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-purple-600 hover:text-purple-700"
-                    }`}
-                  >
-                    {countdown > 0
-                      ? `Reenviar en ${countdown}s`
-                      : "Reenviar código"}
-                  </button>
-
-                  <div className="pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setShowVerification(false)}
-                      className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-300"
-                    >
-                      ← Volver al login
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Botón de envío */}
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-              whileHover={{ scale: isLoading ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading ? 1 : 0.98 }}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  {showVerification ? "Verificando..." : "Enviando código..."}
-                </div>
-              ) : showVerification ? (
-                "Verificar Código"
-              ) : (
-                "Enviar Código"
-              )}
-            </motion.button>
-
-            {/* Enlaces adicionales */}
-            <div className="text-center space-y-3">
-              <p className="text-sm text-gray-600">
-                ¿No tienes cuenta?{" "}
-                <Link
-                  to="/auth"
-                  className="text-purple-600 hover:text-purple-700 font-medium transition-colors duration-300"
-                >
-                  Regístrate aquí
-                </Link>
-              </p>
-              <p className="text-sm text-gray-500">
-                ¿Olvidaste tu contraseña?{" "}
-                <button
-                  type="button"
-                  className="text-purple-600 hover:text-purple-700 font-medium transition-colors duration-300"
-                  onClick={() =>
-                    alert("Función de recuperación de contraseña en desarrollo")
-                  }
-                >
-                  Recupérala
-                </button>
-              </p>
-            </div>
-          </div>
-        </motion.form>
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 py-3 rounded-lg font-semibold"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5">
+              <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.739 31.26 29.24 34 24 34c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.156 7.961 3.039l5.657-5.657C34.046 4.14 29.268 2 24 2 12.955 2 4 10.955 4 22s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.651-.389-3.917z" />
+              <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.473 16.03 18.879 13 24 13c3.059 0 5.842 1.156 7.961 3.039l5.657-5.657C34.046 4.14 29.268 2 24 2 15.317 2 7.996 6.709 4.363 13.388l1.943 1.303z" />
+              <path fill="#4CAF50" d="M24 42c5.17 0 9.86-1.977 13.409-5.192l-6.191-5.238C29.142 33.335 26.715 34 24 34c-5.22 0-9.709-3.727-11.298-8.739l-6.5 5.017C9.806 36.793 16.367 42 24 42z" />
+              <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303C34.92 31.26 29.24 34 24 34c-5.22 0-9.709-3.727-11.298-8.739l-6.5 5.017C9.806 36.793 16.367 42 24 42c8.837 0 19-6.5 19-20 0-1.341-.138-2.651-.389-3.917z" />
+            </svg>
+            Continuar con Google
+          </button>
+        </motion.div>
       </motion.div>
     </div>
   );

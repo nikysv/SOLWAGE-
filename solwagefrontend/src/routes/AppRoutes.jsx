@@ -3,22 +3,23 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "../pages/landingPageView/LandingPage";
 import TechnologyPage from "../pages/technologyView/TechnologyPage";
 import DocumentationPage from "../pages/documentationView/DocumentationPage";
-import AuthPage from "../pages/AuthPage";
+import { AuthPage } from "../pages/AuthPage";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import FreelancerDashboard from "../pages/FreelancerDashboard";
 import EmployerDashboardPage from "../pages/EmployerDashboardPage";
-import TestLoginPage from "../pages/TestLoginPage";
 import JobManagementPage from "../pages/JobManagementPage";
 import JobCreationPage from "../pages/JobCreationPage";
 import DeFiPage from "../pages/DeFiPage";
 import WorkDetailsPage from "../pages/WorkDetailsPage";
 import MilestoneReviewPage from "../pages/MilestoneReviewPage";
+import WelcomePage from "../pages/WelcomePage";
+import FreelancerWalletPage from "../pages/FreelancerWalletPage";
+import Layout from "../components/layout/Layout";
 
 const AppRoutes = ({ auth }) => {
   const { isAuthenticated, isLoading } = auth;
 
-  // Mostrar loading mientras se verifica la autenticación
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
@@ -32,48 +33,32 @@ const AppRoutes = ({ auth }) => {
 
   return (
     <Routes>
-      {/* Rutas públicas - Accesibles sin autenticación */}
+      {/* Rutas públicas */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/tecnologia" element={<TechnologyPage />} />
       <Route path="/documentacion" element={<DocumentationPage />} />
-      <Route path="/test-login" element={<TestLoginPage auth={auth} />} />
 
-      {/* Rutas de autenticación */}
+      {/* Autenticación */}
+      <Route path="/auth" element={<AuthPage auth={auth} />} />
+      <Route path="/login" element={<LoginPage auth={auth} />} />
+
+      {/* Bienvenida explícita */}
       <Route
-        path="/auth"
+        path="/welcome"
         element={
           isAuthenticated ? (
-            auth.user?.userType === "employer" ? (
-              <Navigate to="/employer/dashboard" replace />
-            ) : (
-              <Navigate to="/freelancer/dashboard" replace />
-            )
+            <WelcomePage auth={auth} />
           ) : (
-            <AuthPage onLoginSuccess={(userData) => auth.register(userData)} />
+            <Navigate to="/auth" replace />
           )
         }
       />
 
-      <Route
-        path="/login"
-        element={
-          isAuthenticated ? (
-            auth.user?.userType === "employer" ? (
-              <Navigate to="/employer/dashboard" replace />
-            ) : (
-              <Navigate to="/freelancer/dashboard" replace />
-            )
-          ) : (
-            <LoginPage auth={auth} />
-          )
-        }
-      />
-
-      {/* Rutas protegidas - Requieren autenticación */}
+      {/* Protegidas */}
       <Route
         path="/employer/dashboard"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <EmployerDashboardPage
               key="dashboard"
               auth={auth}
@@ -88,7 +73,7 @@ const AppRoutes = ({ auth }) => {
       <Route
         path="/freelancer/dashboard"
         element={
-          isAuthenticated && auth.user?.userType === "freelancer" ? (
+          isAuthenticated && auth.userData?.userType === "freelancer" ? (
             <FreelancerDashboard auth={auth} />
           ) : (
             <Navigate to="/auth" replace />
@@ -99,12 +84,13 @@ const AppRoutes = ({ auth }) => {
       <Route
         path="/dashboard"
         element={
-          isAuthenticated ? (
-            // Redirección basada en el tipo de usuario
-            auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData ? (
+            auth.userData.userType === "employer" ? (
               <Navigate to="/employer/dashboard" replace />
-            ) : (
+            ) : auth.userData.userType === "freelancer" ? (
               <Navigate to="/freelancer/dashboard" replace />
+            ) : (
+              <Navigate to="/auth" replace />
             )
           ) : (
             <Navigate to="/auth" replace />
@@ -112,55 +98,41 @@ const AppRoutes = ({ auth }) => {
         }
       />
 
-      <Route
-        path="/welcome"
-        element={
-          isAuthenticated ? (
-            <DashboardPage auth={auth} />
-          ) : (
-            <Navigate to="/auth" replace />
-          )
-        }
-      />
-
-      {/* Rutas específicas para empleadores */}
+      {/* Empleador */}
       <Route
         path="/employer/jobs/create"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <JobCreationPage auth={auth} />
           ) : (
             <Navigate to="/employer/dashboard" replace />
           )
         }
       />
-
       <Route
         path="/employer/jobs/:jobId"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <JobManagementPage auth={auth} />
           ) : (
             <Navigate to="/employer/dashboard" replace />
           )
         }
       />
-
       <Route
         path="/employer/jobs/:jobId/milestone/:milestoneId/review"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <MilestoneReviewPage auth={auth} />
           ) : (
             <Navigate to="/employer/dashboard" replace />
           )
         }
       />
-
       <Route
         path="/employer/trabajos"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <EmployerDashboardPage
               key="trabajos"
               auth={auth}
@@ -171,11 +143,10 @@ const AppRoutes = ({ auth }) => {
           )
         }
       />
-
       <Route
         path="/employer/talento"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <EmployerDashboardPage
               key="talento"
               auth={auth}
@@ -186,11 +157,10 @@ const AppRoutes = ({ auth }) => {
           )
         }
       />
-
       <Route
         path="/employer/wallet"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <EmployerDashboardPage
               key="wallet"
               auth={auth}
@@ -201,11 +171,10 @@ const AppRoutes = ({ auth }) => {
           )
         }
       />
-
       <Route
         path="/employer/perfil"
         element={
-          isAuthenticated && auth.user?.userType === "employer" ? (
+          isAuthenticated && auth.userData?.userType === "employer" ? (
             <EmployerDashboardPage
               key="perfil"
               auth={auth}
@@ -217,30 +186,38 @@ const AppRoutes = ({ auth }) => {
         }
       />
 
-      {/* Rutas específicas para freelancers */}
+      {/* Freelancer */}
       <Route
         path="/freelancer/defi"
         element={
-          isAuthenticated && auth.user?.userType === "freelancer" ? (
+          isAuthenticated && auth.userData?.userType === "freelancer" ? (
             <DeFiPage auth={auth} />
           ) : (
             <Navigate to="/freelancer/dashboard" replace />
           )
         }
       />
-
       <Route
         path="/freelancer/work/:workId"
         element={
-          isAuthenticated && auth.user?.userType === "freelancer" ? (
+          isAuthenticated && auth.userData?.userType === "freelancer" ? (
             <WorkDetailsPage auth={auth} />
           ) : (
             <Navigate to="/freelancer/dashboard" replace />
           )
         }
       />
-
-      {/* Redirección por defecto - Siempre va a la página principal */}
+      <Route
+        path="/freelancer/wallet"
+        element={
+          isAuthenticated && auth.userData?.userType === "freelancer" ? (
+            <FreelancerWalletPage auth={auth} />
+          ) : (
+            <Navigate to="/freelancer/dashboard" replace />
+          )
+        }
+      />
+      {/* Redirección por defecto */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

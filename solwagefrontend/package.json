@@ -10,12 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@safe-global/protocol-kit": "6.0.1",
+    "@safe-global/safe-deployments": "1.36.0",
+    "@safe-global/safe-ethers-lib": "^1.9.2",
+    "buffer": "^6.0.3",
+    "ethers": "^6.15.0",
+    "firebase": "^12.1.0",
     "framer-motion": "^12.23.12",
+    "lucide-react": "^0.539.0",
+    "process": "^0.11.10",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.7.1",
-    "recharts": "^3.1.2"
+    "recharts": "^3.1.2",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

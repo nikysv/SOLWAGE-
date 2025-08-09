@@ -1323,14 +1323,16 @@ const FreelancerDashboard = ({ auth }) => {
                   { id: "ofertas", label: "Ofertas", icon: "💼" },
                   { id: "invitaciones", label: "Invitaciones", icon: "📨" },
                   { id: "activos", label: "Trabajos Activos", icon: "⚡" },
-                  { id: "defi", label: "DeFi", icon: "📈" },
+                  { id: "referidos", label: "Referidos", icon: "🚀" },
                   { id: "perfil", label: "Perfil", icon: "👤" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => {
-                      if (tab.id === "defi") {
-                        navigate("/freelancer/defi");
+                      if (tab.id === "referidos") {
+                        navigate("/freelancer/referidos");
+                      } else if (tab.id === "perfil") {
+                        navigate("/freelancer/perfil");
                       } else {
                         setActiveTab(tab.id);
                       }
@@ -1346,6 +1348,33 @@ const FreelancerDashboard = ({ auth }) => {
                     <span>{tab.label}</span>
                   </button>
                 ))}
+
+                {/* Sección Wallet en móvil */}
+                <div className="pt-2">
+                  <div className="px-4 pb-2 text-xs font-semibold text-gray-500">
+                    Wallet
+                  </div>
+                  <button
+                    onClick={() => {
+                      navigate("/freelancer/wallet");
+                      setShowFilters(false);
+                    }}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+                  >
+                    <span className="text-lg">👛</span>
+                    <span>Mi Wallet</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/freelancer/defi");
+                      setShowFilters(false);
+                    }}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+                  >
+                    <span className="text-lg">📈</span>
+                    <span>DeFi</span>
+                  </button>
+                </div>
 
                 {/* Mobile Logout Button */}
                 <motion.button
@@ -1375,18 +1404,10 @@ const FreelancerDashboard = ({ auth }) => {
                   { id: "invitaciones", label: "Invitaciones", icon: "📨" },
                   { id: "activos", label: "Trabajos Activos", icon: "⚡" },
                   { id: "referidos", label: "Referidos", icon: "🚀" },
-                  { id: "defi", label: "DeFi", icon: "📈" },
-                  { id: "perfil", label: "Perfil", icon: "👤" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => {
-                      if (tab.id === "defi") {
-                        navigate("/freelancer/defi");
-                      } else {
-                        setActiveTab(tab.id);
-                      }
-                    }}
+                    onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
                       activeTab === tab.id
                         ? "bg-purple-100 text-purple-700"
@@ -1397,6 +1418,44 @@ const FreelancerDashboard = ({ auth }) => {
                     <span>{tab.label}</span>
                   </button>
                 ))}
+
+                {/* Dropdown Wallet (desktop) - antes de Perfil */}
+                <div className="relative group hidden lg:block">
+                  <button
+                    className="inline-flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 transition-all"
+                    type="button"
+                  >
+                    <span>👛</span>
+                    <span>Wallet</span>
+                  </button>
+                  <div className="absolute mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg hidden group-hover:block">
+                    <button
+                      onClick={() => navigate("/freelancer/wallet")}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                    >
+                      Mi Wallet
+                    </button>
+                    <button
+                      onClick={() => navigate("/freelancer/defi")}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                    >
+                      DeFi
+                    </button>
+                  </div>
+                </div>
+
+                {/* Botón Perfil al final */}
+                <button
+                  onClick={() => setActiveTab("perfil")}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    activeTab === "perfil"
+                      ? "bg-purple-100 text-purple-700"
+                      : "text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+                  }`}
+                >
+                  <span>👤</span>
+                  <span>Perfil</span>
+                </button>
               </nav>
             </div>
 
