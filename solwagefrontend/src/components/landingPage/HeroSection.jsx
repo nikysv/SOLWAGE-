@@ -86,10 +86,23 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Solwage:{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              El Futuro del Trabajo
-            </span>
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <motion.img
+                src="/logo.png"
+                alt="Solwage Logo"
+                className="h-20 w-20 sm:h-28 sm:w-28 lg:h-36 lg:w-36 object-contain drop-shadow-lg"
+                initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+              />
+              <span>Solwage</span>
+            </div>
+            <div className="mt-2">
+              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                El Futuro del Trabajo
+              </span>
+            </div>
           </motion.h1>
 
           <motion.p
@@ -97,15 +110,14 @@ const HeroSection = () => {
             className="text-xl sm:text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
           >
             La plataforma de talento digital diseñada para Latinoamérica. ¿Estás
             buscando una manera de trabajar y recibir pagos de forma justa y sin
-            las complicaciones de las plataformas tradicionales como Upwork o
-            Freelancer? Solwage te conecta con oportunidades globales,
-            permitiéndote recibir pagos directamente en stablecoins,
-            construyendo una reputación digital verificable y ahorrando en altas
-            comisiones.
+            las complicaciones de las plataformas tradicionales? Solwage te
+            conecta con oportunidades globales, permitiéndote recibir pagos
+            directamente en stablecoins, construyendo una reputación digital
+            verificable y ahorrando en altas comisiones.
           </motion.p>
 
           <motion.div
@@ -113,7 +125,7 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
+            transition={{ delay: 1.0, duration: 0.8 }}
           >
             <motion.button
               className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl"
@@ -132,7 +144,7 @@ const HeroSection = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
           >
             {stats.map((stat, index) => (
               <motion.div
@@ -140,7 +152,7 @@ const HeroSection = () => {
                 className="text-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1 + index * 0.1, duration: 0.6 }}
+                transition={{ delay: 1.4 + index * 0.1, duration: 0.6 }}
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="text-3xl sm:text-4xl font-bold text-purple-600 mb-2">

@@ -8,7 +8,7 @@ class AuthService {
     this.smartWalletService = new SmartWalletService();
   }
 
-  // Login con Google
+  // Login con Google (permite tanto login como registro)
   async loginWithGoogle() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -52,6 +52,48 @@ class AuthService {
       }
     } catch (error) {
       console.error("Error en login con Google:", error);
+      throw error;
+    }
+  }
+
+  // Login específico para usuarios existentes
+  async loginExistingUserWithGoogle() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Verificar si el usuario ya existe en Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      if (userDoc.exists()) {
+        // Usuario existente - ir directamente al dashboard
+        const userData = userDoc.data();
+        return {
+          user,
+          userData,
+          isNewUser: false,
+          isExistingUser: true,
+          requiresProfileCompletion:
+            userData.requiresProfileCompletion || false,
+        };
+      } else {
+        // Usuario no registrado - cerrar sesión y lanzar error específico
+        await signOut(auth);
+        const userInfo = {
+          email: user.email,
+          displayName: user.displayName,
+          uid: user.uid,
+        };
+        const error = new Error("Usuario no registrado en Solwage");
+        error.code = "auth/user-not-registered";
+        error.userInfo = userInfo;
+        throw error;
+      }
+    } catch (error) {
+      if (error.code === "auth/user-not-registered") {
+        throw error;
+      }
+      console.error("Error en login de usuario existente:", error);
       throw error;
     }
   }

@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 
 // Cargar configuración desde variables de entorno (Vite)
 const firebaseConfig = {
-  apiKey: "AIzaSyB8jBDw4Wk3yeX16LXECl28AiTiDXnESZ0",
-  authDomain: "solwageprueba.firebaseapp.com",
-  projectId: "solwageprueba",
-  storageBucket: "solwageprueba.firebasestorage.app",
-  messagingSenderId: "986855481225",
-  appId: "1:986855481225:web:80ad00606d61f0168b8b58",
-  measurementId: "G-5VDGJ5413Q",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Validación básica de variables requeridas

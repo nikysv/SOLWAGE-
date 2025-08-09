@@ -52,6 +52,15 @@ const AuthPage = ({ auth }) => {
 
     if (location.state?.user) {
       setCurrentUser(location.state.user);
+    } else if (location.state?.userInfo) {
+      // Crear un objeto user básico a partir de userInfo serializable
+      const userFromInfo = {
+        uid: location.state.userInfo.uid,
+        email: location.state.userInfo.email,
+        displayName: location.state.userInfo.displayName,
+        photoURL: location.state.userInfo.photoURL,
+      };
+      setCurrentUser(userFromInfo);
     }
     if (
       location.state?.step === "user-type" ||

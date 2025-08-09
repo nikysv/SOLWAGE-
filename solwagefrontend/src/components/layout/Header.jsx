@@ -90,99 +90,89 @@ const Header = () => {
             </Link>
                      {" "}
           </motion.div>
-                    {/* Desktop Navigation */}         {" "}
-          <div className="hidden md:flex items-center space-x-8">
-                        {/* Inicio - siempre visible */}           {" "}
-            <motion.div
-              className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-            >
-                           {" "}
-              <Link to="/" className="block">
-                                Inicio              {" "}
-              </Link>
-                         {" "}
-            </motion.div>
-                        {/* Enlaces internos - solo en landing page */}         
-             {" "}
-            {location.pathname === "/" && (
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-10">
+            {/* Navegación principal - solo en landing page */}
+            {location.pathname === "/" && !isAuthenticated && (
               <>
-                               {" "}
                 <motion.button
                   onClick={() => scrollToSection("que-es-solwage")}
-                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                  whileHover={{ y: -2 }}
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
                   transition={{ duration: 0.2 }}
                 >
-                                    ¿Qué es Solwage?                {" "}
+                  ¿Qué es Solwage?
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
                 </motion.button>
-                               {" "}
                 <motion.button
                   onClick={() => scrollToSection("beneficios")}
-                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                  whileHover={{ y: -2 }}
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
                   transition={{ duration: 0.2 }}
                 >
-                                    Beneficios                {" "}
+                  Beneficios
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
                 </motion.button>
-                             {" "}
+                <motion.div
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link to="/tecnologia" className="block">
+                    Tecnología
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                </motion.div>
               </>
             )}
-                        {/* Enlace a Tecnología - siempre visible */}           {" "}
-            <motion.div
-              className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.2 }}
-            >
-                           {" "}
-              <Link to="/tecnologia" className="block">
-                                Tecnología              {" "}
-              </Link>
-                         {" "}
-            </motion.div>
-                        {/* Navegación autenticada */}           {" "}
-            {isAuthenticated ? (
+
+            {/* Navegación para usuarios autenticados */}
+            {isAuthenticated && (
               <>
-                               {" "}
-                {isFreelancer && (
-                  <>
-                                        {/* Enlaces de Wallet */}               
-                       {" "}
-                    <motion.div
-                      className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                                           {" "}
-                      <Link to="/freelancer/wallet" className="block">
-                                                Mi Wallet                      {" "}
-                      </Link>
-                                         {" "}
-                    </motion.div>
-                                       {" "}
-                    <motion.div
-                      className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                      whileHover={{ y: -2 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                                           {" "}
-                      <Link to="/freelancer/defi" className="block">
-                                                DeFi                      {" "}
-                      </Link>
-                                         {" "}
-                    </motion.div>
-                                     {" "}
-                  </>
-                )}
-                                                {/* Enlace a Dashboard */}     
-                         {" "}
                 <motion.div
-                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                  whileHover={{ y: -2 }}
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
                   transition={{ duration: 0.2 }}
                 >
-                                   {" "}
+                  <Link to="/" className="block">
+                    Inicio
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                </motion.div>
+                <motion.div
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link to="/tecnologia" className="block">
+                    Tecnología
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                </motion.div>
+              </>
+            )}
+          </div>
+          {/* Botones de acción */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {isAuthenticated ? (
+              <>
+                {isFreelancer && (
+                  <motion.div
+                    className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                    whileHover={{ y: -1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Link to="/freelancer/wallet" className="block">
+                      Mi Wallet
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                    </Link>
+                  </motion.div>
+                )}
+                <motion.div
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium relative group"
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <Link
                     to={
                       isEmployer
@@ -191,274 +181,222 @@ const Header = () => {
                     }
                     className="block"
                   >
-                                        Dashboard                  {" "}
+                    Dashboard
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
                   </Link>
-                                 {" "}
                 </motion.div>
-                               {" "}
                 <motion.button
                   onClick={logout}
-                  className="bg-white text-purple-600 px-6 py-2.5 rounded-lg border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
+                  className="ml-4 bg-gradient-to-r from-red-50 to-red-100 text-red-600 px-6 py-2.5 rounded-xl border border-red-200 hover:border-red-300 hover:from-red-100 hover:to-red-200 transition-all duration-300 font-medium"
+                  whileHover={{ y: -1, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Cerrar sesión
+                </motion.button>
+              </>
+            ) : (
+              <>
+                <motion.button
+                  className="text-gray-600 hover:text-purple-600 transition-all duration-300 font-medium px-4 py-2"
+                  whileHover={{ y: -1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link to="/login" className="block">
+                    Iniciar Sesión
+                  </Link>
+                </motion.button>
+                <motion.button
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2 }}
                 >
-                                    Cerrar sesión                {" "}
-                </motion.button>
-                             {" "}
-              </>
-            ) : (
-              <>
-                               {" "}
-                <motion.div
-                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
-                >
-                                   {" "}
                   <Link to="/auth" className="block">
-                                       {" "}
-                    <motion.button
-                      className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
-                      whileHover={{ y: -2, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                                            Empezar                    {" "}
-                    </motion.button>
-                                     {" "}
+                    Empezar Ahora
                   </Link>
-                                 {" "}
-                </motion.div>
-                               {" "}
-                <motion.div
-                  className="text-gray-700 hover:text-purple-600 transition-all duration-300 font-medium relative group"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
-                >
-                                   {" "}
-                  <Link to="/login" className="block">
-                                       {" "}
-                    <motion.button
-                      className="bg-white text-purple-600 px-6 py-2.5 rounded-lg border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
-                      whileHover={{ y: -2, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                                            Iniciar Sesión                    {" "}
-                    </motion.button>
-                                     {" "}
-                  </Link>
-                                 {" "}
-                </motion.div>
-                             {" "}
+                </motion.button>
               </>
             )}
                      {" "}
           </div>
-                    {/* Mobile menu button */}         {" "}
-          <div className="md:hidden">
-                       {" "}
+          {/* Mobile menu button */}
+          <div className="lg:hidden">
             <motion.button
               onClick={toggleMenu}
-              className="text-gray-700 hover:text-purple-600 transition-colors duration-300"
+              className={`p-2 rounded-xl transition-all duration-300 ${
+                isMenuOpen
+                  ? "bg-purple-100 text-purple-600"
+                  : "text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+              }`}
               whileTap={{ scale: 0.95 }}
             >
-                           {" "}
               <svg
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                               {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-                             {" "}
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
               </svg>
             </motion.button>
           </div>
         </div>
-                {/* Mobile Navigation */}       {" "}
+        {/* Mobile Navigation */}
         <AnimatePresence>
-                   {" "}
           {isMenuOpen && (
             <motion.div
-              className="md:hidden"
+              className="lg:hidden"
               variants={menuVariants}
               initial="closed"
               animate="open"
               exit="closed"
             >
-                           {" "}
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-                                {/* Inicio - siempre visible */}               {" "}
-                <motion.div
-                  className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
-                  variants={menuItemVariants}
-                >
-                                   {" "}
-                  <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                                        Inicio                  {" "}
-                  </Link>
-                                 {" "}
-                </motion.div>
-                               {" "}
-                {location.pathname === "/" && (
+              <div className="px-6 py-6 space-y-4 bg-white/95 backdrop-blur-lg border-t border-purple-100 shadow-xl">
+                {/* Navegación principal */}
+                {location.pathname === "/" && !isAuthenticated && (
                   <>
-                                       {" "}
                     <motion.button
                       onClick={() => {
                         scrollToSection("que-es-solwage");
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                      className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
                       variants={menuItemVariants}
                     >
-                                            ¿Qué es Solwage?                    {" "}
+                      ¿Qué es Solwage?
                     </motion.button>
-                                       {" "}
                     <motion.button
                       onClick={() => {
                         scrollToSection("beneficios");
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                      className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
                       variants={menuItemVariants}
                     >
-                                            Beneficios                    {" "}
+                      Beneficios
                     </motion.button>
-                                     {" "}
+                    <motion.div
+                      className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
+                      variants={menuItemVariants}
+                    >
+                      <Link
+                        to="/tecnologia"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Tecnología
+                      </Link>
+                    </motion.div>
                   </>
                 )}
-                               {" "}
-                <motion.div
-                  className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
-                  variants={menuItemVariants}
-                >
-                                   {" "}
-                  <Link to="/tecnologia" onClick={() => setIsMenuOpen(false)}>
-                                        Tecnología                  {" "}
-                  </Link>
-                                 {" "}
-                </motion.div>
-                               {" "}
-                {isAuthenticated ? (
+
+                {/* Navegación para usuarios autenticados */}
+                {isAuthenticated && (
                   <>
-                                       {" "}
-                    {isFreelancer && (
-                      <>
-                                               {" "}
-                        <div className="px-3 pt-2 text-xs font-semibold text-gray-500">
-                                                    Wallet                      
-                           {" "}
-                        </div>
-                                               {" "}
+                    <motion.div
+                      className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
+                      variants={menuItemVariants}
+                    >
+                      <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                        Inicio
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
+                      variants={menuItemVariants}
+                    >
+                      <Link
+                        to="/tecnologia"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Tecnología
+                      </Link>
+                    </motion.div>
+                  </>
+                )}
+                {/* Sección de botones móviles */}
+                <div className="pt-4 border-t border-gray-200 space-y-3">
+                  {isAuthenticated ? (
+                    <>
+                      {isFreelancer && (
                         <motion.div
-                          className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
+                          className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
                           variants={menuItemVariants}
                         >
-                                                   {" "}
                           <Link
                             to="/freelancer/wallet"
                             onClick={() => setIsMenuOpen(false)}
                           >
-                                                        Mi Wallet              
-                                       {" "}
+                            Mi Wallet
                           </Link>
-                                                 {" "}
                         </motion.div>
-                                               {" "}
-                        <motion.div
-                          className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
-                          variants={menuItemVariants}
-                        >
-                                                   {" "}
-                          <Link
-                            to="/freelancer/defi"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                                                        DeFi                    
-                                 {" "}
-                          </Link>
-                                                 {" "}
-                        </motion.div>
-                                             {" "}
-                      </>
-                    )}
-                                       {" "}
-                    <motion.div
-                      className="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors duration-300"
-                      variants={menuItemVariants}
-                    >
-                                           {" "}
-                      <Link
-                        to={
-                          isEmployer
-                            ? "/employer/dashboard"
-                            : "/freelancer/dashboard"
-                        }
-                        onClick={() => setIsMenuOpen(false)}
+                      )}
+                      <motion.div
+                        className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
+                        variants={menuItemVariants}
                       >
-                                                Dashboard                      {" "}
-                      </Link>
-                                         {" "}
-                    </motion.div>
-                                       {" "}
-                    <motion.button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        logout();
-                      }}
-                      className="block w-full text-left px-3 py-2 bg-white text-purple-600 border-2 border-purple-200 rounded-md hover:bg-purple-50 transition-colors duration-300"
-                      variants={menuItemVariants}
-                    >
-                                            Cerrar sesión                    {" "}
-                    </motion.button>
-                                     {" "}
-                  </>
-                ) : (
-                  <>
-                                       {" "}
-                    <motion.div
-                      className="block w-full text-left px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-300"
-                      variants={menuItemVariants}
-                    >
-                                           {" "}
-                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                                                Empezar                      {" "}
-                      </Link>
-                                         {" "}
-                    </motion.div>
-                                       {" "}
-                    <motion.div
-                      className="block w-full text-left px-3 py-2 bg-white text-purple-600 border-2 border-purple-200 rounded-md hover:bg-purple-50 transition-colors duration-300"
-                      variants={menuItemVariants}
-                    >
-                                           {" "}
-                      <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                                                Iniciar Sesión                  
-                           {" "}
-                      </Link>
-                                         {" "}
-                    </motion.div>
-                                     {" "}
-                  </>
-                )}
-                             {" "}
+                        <Link
+                          to={
+                            isEmployer
+                              ? "/employer/dashboard"
+                              : "/freelancer/dashboard"
+                          }
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                      </motion.div>
+                      <motion.button
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          logout();
+                        }}
+                        className="w-full text-left px-4 py-3 bg-gradient-to-r from-red-50 to-red-100 text-red-600 border border-red-200 rounded-xl hover:from-red-100 hover:to-red-200 transition-all duration-300 font-medium"
+                        variants={menuItemVariants}
+                      >
+                        Cerrar sesión
+                      </motion.button>
+                    </>
+                  ) : (
+                    <>
+                      <motion.div
+                        className="block w-full text-left px-4 py-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-300 font-medium"
+                        variants={menuItemVariants}
+                      >
+                        <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                          Iniciar Sesión
+                        </Link>
+                      </motion.div>
+                      <motion.div
+                        className="block w-full text-center px-4 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 font-semibold shadow-lg"
+                        variants={menuItemVariants}
+                      >
+                        <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                          Empezar Ahora
+                        </Link>
+                      </motion.div>
+                    </>
+                  )}
+                </div>
               </div>
-                         {" "}
             </motion.div>
           )}
-                 {" "}
         </AnimatePresence>
-             {" "}
       </div>
-         {" "}
     </motion.header>
   );
 };
