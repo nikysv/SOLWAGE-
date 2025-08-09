@@ -15,6 +15,7 @@ const FreelancerWalletPage = ({ auth }) => {
   const [history, setHistory] = useState([]);
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState("USDC");
   const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
@@ -137,9 +138,11 @@ const FreelancerWalletPage = ({ auth }) => {
               <div>
                 <p className="text-sm text-gray-600">Balance</p>
                 <p className="text-3xl font-bold text-purple-600">
-                  {balance} XLM
+                  ${balance} USDC
                 </p>
-                <p className="text-xs text-gray-500">Red Stellar</p>
+                <p className="text-xs text-gray-500">
+                  Red Stellar • También disponible: USDT, XLM
+                </p>
               </div>
             </div>
           </motion.div>
@@ -153,6 +156,36 @@ const FreelancerWalletPage = ({ auth }) => {
           >
             <h3 className="text-lg font-semibold mb-4">Enviar Fondos</h3>
             <form onSubmit={handleSend} className="space-y-4">
+              {/* Selección de moneda */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Seleccionar moneda
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {["USDC", "USDT", "XLM"].map((currency) => (
+                    <button
+                      key={currency}
+                      type="button"
+                      onClick={() => setSelectedCurrency(currency)}
+                      className={`p-3 rounded-lg border-2 transition-all duration-200 ${
+                        selectedCurrency === currency
+                          ? "border-purple-500 bg-purple-50 text-purple-700"
+                          : "border-gray-200 hover:border-gray-300 text-gray-600"
+                      }`}
+                    >
+                      <div className="text-sm font-semibold">{currency}</div>
+                      <div className="text-xs text-gray-500">
+                        {currency === "USDC"
+                          ? "💵 USD Coin"
+                          : currency === "USDT"
+                          ? "💰 Tether"
+                          : "⭐ Stellar"}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Dirección Stellar de destino
@@ -167,7 +200,7 @@ const FreelancerWalletPage = ({ auth }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Monto (XLM)
+                  Monto ({selectedCurrency})
                 </label>
                 <input
                   type="number"
@@ -177,6 +210,9 @@ const FreelancerWalletPage = ({ auth }) => {
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Red: Stellar • Comisión: ~0.00001 XLM
+                </p>
               </div>
               <button
                 type="submit"
@@ -224,7 +260,9 @@ const FreelancerWalletPage = ({ auth }) => {
                       </div>
                       <div>
                         <span className="font-medium">Valor:</span>
-                        <p className="text-gray-600">{tx.value} XLM</p>
+                        <p className="text-gray-600">
+                          {tx.value} {tx.currency || selectedCurrency}
+                        </p>
                         <span
                           className={`inline-block px-2 py-1 rounded-full text-xs ${
                             tx.status === "confirmed"

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
+import WithdrawModal from "./WithdrawModal";
 
 const WalletView = ({
   walletBalance,
@@ -9,6 +10,7 @@ const WalletView = ({
 }) => {
   const [copySuccess, setCopySuccess] = useState(false);
   const [showPaymentHistory, setShowPaymentHistory] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   // Dirección de Smart Wallet simulada
   const walletAddress =
@@ -118,6 +120,23 @@ const WalletView = ({
     if (type === "deposit") return "text-green-600";
     if (type === "escrow") return "text-yellow-600";
     return "text-red-600";
+  };
+
+  const handleWithdraw = async (withdrawData) => {
+    try {
+      // Simular proceso de retiro
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Actualizar el balance
+      setWalletBalance((prev) => prev - withdrawData.amount);
+
+      console.log(
+        `Retiro exitoso: ${withdrawData.amount} ${withdrawData.currency} a ${withdrawData.address}`
+      );
+    } catch (error) {
+      console.error("Error en retiro:", error);
+      throw error;
+    }
   };
 
   return (
@@ -403,28 +422,52 @@ const WalletView = ({
         )}
       </div>
 
-      {/* Botón de Acción */}
-      <motion.button
-        onClick={onOpenDepositModal}
-        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {/* Botones de Acción */}
+      <div className="grid grid-cols-2 gap-4">
+        <motion.button
+          onClick={onOpenDepositModal}
+          className="bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
-        </svg>
-        <span>Añadir Fondos</span>
-      </motion.button>
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+          <span>Depositar</span>
+        </motion.button>
+
+        <motion.button
+          onClick={() => setShowWithdrawModal(true)}
+          className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+            />
+          </svg>
+          <span>Retirar</span>
+        </motion.button>
+      </div>
 
       {/* Información de seguridad */}
       <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -477,6 +520,14 @@ const WalletView = ({
           <span>Documentación</span>
         </motion.a>
       </div>
+
+      {/* Modal de Retiro */}
+      <WithdrawModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        walletBalance={walletBalance}
+        onWithdraw={handleWithdraw}
+      />
     </motion.div>
   );
 };
